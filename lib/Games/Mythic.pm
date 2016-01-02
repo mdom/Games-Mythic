@@ -7,20 +7,21 @@ use Moo;
 
 has chaos_level => ( is => 'rw', default => 5 );
 
-my $fate_chart =
-  [ [ 50, 25, 10, 5, 5, 0, 0, -20, -20, -40, -40, -55, -65 ],
-    [ 75,  50,  25,  15,  10,  5,   5,   0,  0,  -20, -20, -35, -45 ],
-    [ 90,  75,  50,  35,  25,  15,  10,  5,  5,  0,   0,   -15, -25 ],
-    [ 95,  85,  65,  50,  45,  25,  15,  10, 5,  5,   5,   -5,  -15 ],
-    [ 100, 90,  75,  55,  50,  35,  20,  15, 10, 5,   5,   0,   -10 ],
-    [ 105, 95,  85,  75,  65,  50,  35,  25, 15, 10,  10,  5,   -5 ],
-    [ 110, 95,  90,  85,  80,  65,  50,  45, 25, 20,  15,  5,   0 ],
-    [ 115, 100, 95,  90,  85,  75,  55,  50, 35, 25,  20,  10,  5 ],
-    [ 120, 105, 95,  95,  90,  85,  75,  65, 50, 45,  35,  15,  5 ],
-    [ 125, 115, 100, 95,  95,  90,  80,  75, 55, 50,  45,  20,  10 ],
-    [ 130, 125, 110, 95,  95,  90,  85,  80, 65, 55,  50,  25,  10 ],
-    [ 150, 145, 130, 100, 100, 95,  95,  90, 85, 80,  75,  50,  25 ],
-    [ 170, 165, 150, 120, 120, 100, 100, 95, 95, 90,  90,  75,  50 ] ];
+my $fate_chart = [
+    [ 50,  25,  10,  5,   5,   0,   0,   -20, -20, -40, -40, -55, -65 ],
+    [ 75,  50,  25,  15,  10,  5,   5,   0,   0,   -20, -20, -35, -45 ],
+    [ 90,  75,  50,  35,  25,  15,  10,  5,   5,   0,   0,   -15, -25 ],
+    [ 95,  85,  65,  50,  45,  25,  15,  10,  5,   5,   5,   -5,  -15 ],
+    [ 100, 90,  75,  55,  50,  35,  20,  15,  10,  5,   5,   0,   -10 ],
+    [ 105, 95,  85,  75,  65,  50,  35,  25,  15,  10,  10,  5,   -5 ],
+    [ 110, 95,  90,  85,  80,  65,  50,  45,  25,  20,  15,  5,   0 ],
+    [ 115, 100, 95,  90,  85,  75,  55,  50,  35,  25,  20,  10,  5 ],
+    [ 120, 105, 95,  95,  90,  85,  75,  65,  50,  45,  35,  15,  5 ],
+    [ 125, 115, 100, 95,  95,  90,  80,  75,  55,  50,  45,  20,  10 ],
+    [ 130, 125, 110, 95,  95,  90,  85,  80,  65,  55,  50,  25,  10 ],
+    [ 150, 145, 130, 100, 100, 95,  95,  90,  85,  80,  75,  50,  25 ],
+    [ 170, 165, 150, 120, 120, 100, 100, 95,  95,  90,  90,  75,  50 ]
+];
 
 my @ranks = qw(
   miniscule2 miniscule weak low below-average
@@ -106,10 +107,10 @@ my $subjects = [
     "Nature",           "The public",
     "Leadership",       "Fame",
     "Anger",            "Information"
-  ];
+];
 
 sub rank_to_index {
-    my ($self,$rank) = @_;
+    my ( $self, $rank ) = @_;
     state %ranks;
     if ( not %ranks ) {
         while ( my ( $index, $rank ) = each @ranks ) {
@@ -120,22 +121,23 @@ sub rank_to_index {
 }
 
 sub get_odds {
-	my ($self,$acting,$difficulty) = @_;
-	my ($row,$column) = (
-		$self->rank_to_index($self->get_base_rank($acting)),
-		$self->rank_to_index($self->get_base_rank($difficulty)),	
-	);
-	my $odds = $fate_chart->[$row]->[$column];
-	return $odds + $self->get_extreme_modifier($acting) - $self->get_extreme_modifier($difficulty);
+    my ( $self, $acting, $difficulty ) = @_;
+    my ( $row, $column ) = (
+        $self->rank_to_index( $self->get_base_rank($acting) ),
+        $self->rank_to_index( $self->get_base_rank($difficulty) ),
+    );
+    my $odds = $fate_chart->[$row]->[$column];
+    return $odds + $self->get_extreme_modifier($acting) -
+      $self->get_extreme_modifier($difficulty);
 }
 
 sub chaos_level_to_rank {
-    my ( $self ) = @_;
-    if ( $self->chaos_level < 2 ) { return 'high'} ;
-    if ( $self->chaos_level < 4 ) { return 'above-average' };
-    if ( $self->chaos_level < 7 ) { return 'average' };
-    if ( $self->chaos_level < 9 ) { return 'below-average' };
-    if ( $self->chaos_level < 11 ) { return 'low' };
+    my ($self) = @_;
+    if ( $self->chaos_level < 2 )  { return 'high' }
+    if ( $self->chaos_level < 4 )  { return 'above-average' }
+    if ( $self->chaos_level < 7 )  { return 'average' }
+    if ( $self->chaos_level < 9 )  { return 'below-average' }
+    if ( $self->chaos_level < 11 ) { return 'low' }
     return;
 }
 
@@ -185,12 +187,12 @@ sub ask_odds_question {
 #  focusArray[6] = new Array("5/Epic game: the Chaos Factor cannot fall below 3.  Any scene which would normally lower the Chaos below 3 leaves it unchanged."  "1/12/Thread escalates"  "13/16/Remote event"  "17/30/NPC action"  "31/42/Introduce an NPC"  "43/46/Move toward a thread"  "47/58/Move away from a thread"  "59/72/PC negative"  "73/80/PC positive"  "81/84/Ambiguous event"  "85/92/NPC negative"  "93/100/NPC positive")
 
 sub random_element {
-	my $array = shift;
-	return $array->[ rand @$array ];
+    my $array = shift;
+    return $array->[ rand @$array ];
 }
 
 sub random_event {
-  random_element($actions) . "/" . random_element($subjects);
+    random_element($actions) . "/" . random_element($subjects);
 }
- 
+
 1;
