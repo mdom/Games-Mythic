@@ -126,9 +126,13 @@ sub get_odds {
         $self->rank_to_index( $self->get_base_rank($acting) ),
         $self->rank_to_index( $self->get_base_rank($difficulty) ),
     );
-    my $odds = $fate_chart->[$row]->[$column];
-    return $odds + $self->get_extreme_modifier($acting) -
+    my $odds =
+      $fate_chart->[$row]->[$column] +
+      $self->get_extreme_modifier($acting) -
       $self->get_extreme_modifier($difficulty);
+    my $lower = $odds / 5;
+    my $upper = 101 - ( 100 - $odds ) / 5;
+    return [ $lower, $odds, $upper ];
 }
 
 sub chaos_level_to_rank {
