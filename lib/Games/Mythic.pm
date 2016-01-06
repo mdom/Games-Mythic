@@ -120,6 +120,30 @@ sub rank_to_index {
     return $ranks{$rank};
 }
 
+sub d100 {
+    my ($self) = @_;
+    return (int rand 99) + 1;
+}
+
+sub ask {
+    my ( $self, $acting, $difficulty, $roll ) = @_;
+    my $odds = $self->get_odds($acting, $difficulty);
+    $roll = defined $roll ? $roll : $self->d100;
+    if ( $roll <= $odds->[0] ) {
+	   return 'exceptional-no';
+    }
+    elsif ( $roll < $odds->[1] ) {
+	   return 'no';
+    }
+    elsif ( $roll < $odds->[2] ) {
+	   return 'yes';
+    }
+    elsif ( $roll >= $odds->[2] ) {
+	   return 'exceptional-yes';
+    }
+    return;
+}
+
 sub get_odds {
     my ( $self, $acting, $difficulty ) = @_;
     my ( $row, $column ) = (
