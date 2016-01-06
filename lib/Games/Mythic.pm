@@ -5,7 +5,15 @@ use warnings;
 use feature 'state';
 use Moo;
 
-has chaos_level => ( is => 'rw', default => 5 );
+has chaos_level => (
+    is      => 'rw',
+    default => 5,
+    coerce  => sub {
+        return 9 if $_[0] > 9;
+        return 1 if $_[0] < 1;
+        return $_[0];
+    },
+);
 
 my $fate_chart = [
     [ 50,  25,  10,  5,   5,   0,   0,   -20, -20, -40, -40, -55, -65 ],
