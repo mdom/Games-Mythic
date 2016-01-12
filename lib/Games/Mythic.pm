@@ -137,19 +137,27 @@ sub ask {
     my ( $self, $acting, $difficulty, $roll ) = @_;
     my $odds = $self->get_odds($acting, $difficulty);
     $roll = defined $roll ? $roll : $self->d100;
+    my ( $answer, $random_event );
     if ( $roll <= $odds->[0] ) {
-	   return 'exceptional-no';
+        $answer = 'exceptional-no';
     }
     elsif ( $roll < $odds->[1] ) {
-	   return 'no';
+        $answer = 'no';
     }
     elsif ( $roll < $odds->[2] ) {
-	   return 'yes';
+        $answer = 'yes';
     }
     elsif ( $roll >= $odds->[2] ) {
-	   return 'exceptional-yes';
+        $answer = 'exceptional-yes';
     }
-    return;
+    if ( $roll % 11 == 0 ) {
+        $random_event = $self->random_event();
+    }
+    return {
+        answer => $answer,
+        roll   => $roll,
+        event  => $random_event,
+    };
 }
 
 sub get_odds {
