@@ -227,9 +227,35 @@ sub random_element {
     return $array->[ rand @$array ];
 }
 
+my @event_focus = (
+    [ 7   => "Remote event" ],
+    [ 28  => "NPC action" ],
+    [ 35  => "Introduce a new NPC" ],
+    [ 45  => "Move towards a thread" ],
+    [ 52  => "Move away from a thread" ],
+    [ 55  => "Close a thread" ],
+    [ 67  => "PC negative" ],
+    [ 75  => "PC positive" ],
+    [ 83  => "Ambiguous event" ],
+    [ 92  => "NPC negative" ],
+    [ 100 => "NPC positive" ],
+);
+
+sub event_focus {
+    my $roll = d100();
+    for my $focus (@event_focus) {
+        if ( $roll <= $focus->[0] ) {
+            return $focus->[1];
+        }
+    }
+    return;
+}
+
 sub random_event {
     my $self = shift;
-    $self->random_element($actions) . "/" . $self->random_element($subjects);
+    $self->event_focus . ' - '
+      . $self->random_element($actions) . "/"
+      . $self->random_element($subjects);
 }
 
 1;
