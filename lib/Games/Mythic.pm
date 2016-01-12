@@ -223,12 +223,13 @@ sub ask_odds_question {
 #  focusArray[6] = new Array("5/Epic game: the Chaos Factor cannot fall below 3.  Any scene which would normally lower the Chaos below 3 leaves it unchanged."  "1/12/Thread escalates"  "13/16/Remote event"  "17/30/NPC action"  "31/42/Introduce an NPC"  "43/46/Move toward a thread"  "47/58/Move away from a thread"  "59/72/PC negative"  "73/80/PC positive"  "81/84/Ambiguous event"  "85/92/NPC negative"  "93/100/NPC positive")
 
 sub random_element {
-    my $array = shift;
+    my ( $self, $array ) = @_;
     return $array->[ rand @$array ];
 }
 
 sub random_event {
-    random_element($actions) . "/" . random_element($subjects);
+    my $self = shift;
+    $self->random_element($actions) . "/" . $self->random_element($subjects);
 }
 
 1;
