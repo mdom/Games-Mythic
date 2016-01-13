@@ -261,31 +261,40 @@ sub random_element {
 
 my @event_focus = (
     [ 7   => "Remote event" ],
-    [ 28  => "NPC action" ],
+    [ 28  => "NPC action" => 'random_npc' ],
     [ 35  => "Introduce a new NPC" ],
-    [ 45  => "Move towards a thread" ],
-    [ 52  => "Move away from a thread" ],
-    [ 55  => "Close a thread" ],
+    [ 45  => "Move towards a thread" => 'random_thread' ],
+    [ 52  => "Move away from a thread" => 'random_thread' ],
+    [ 55  => "Close a thread" => 'random_thread' ],
     [ 67  => "PC negative" ],
     [ 75  => "PC positive" ],
     [ 83  => "Ambiguous event" ],
-    [ 92  => "NPC negative" ],
-    [ 100 => "NPC positive" ],
+    [ 92  => "NPC negative" => 'random_npc' ],
+    [ 100 => "NPC positive" => 'random_npc' ],
 );
 
 sub event_focus {
+    my $self = shift;
     my $roll = d100();
     for my $focus (@event_focus) {
         if ( $roll <= $focus->[0] ) {
-            return $focus->[1];
+            my $sub = $focus->[2];
+            return {
+                focus => $focus->[1],
+                what  => $sub ? $self->$sub : undef
+            };
         }
     }
     return;
 }
 
 sub random_event {
-    my $self = shift;
-    $self->event_focus . ' - '
+    my $self        = shift;
+    my $event_focus = $self->event_focus;
+    my $focus       = $event_focus->{focus};
+    my $what        = $event_focus->{what};
+    $focus
+      . ( defined $what ? " ($what) " : '' ) . ' - '
       . $self->random_element($actions) . "/"
       . $self->random_element($subjects);
 }
