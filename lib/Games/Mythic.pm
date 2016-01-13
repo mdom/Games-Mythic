@@ -15,6 +15,30 @@ has chaos_level => (
     },
 );
 
+has npcs    => ( is => 'rw', default => sub { {} } );
+has threads => ( is => 'rw', default => sub { {} } );
+
+BEGIN {
+    no strict 'refs';
+
+    foreach my $thing (qw(npc thread)) {
+        my $things = "${thing}s";
+        *{"add_$thing"} = sub {
+            my ( $self, $arg ) = @_;
+
+            $self->$things->{$arg} = 1;
+        };
+        *{"remove_$thing"} = sub {
+            my ( $self, $arg ) = @_;
+            delete $self->$things->{$arg};
+        };
+        *{"random_$thing"} = sub {
+            my ($self) = @_;
+            return $self->random_element( [ keys %{ $self->$things } ] );
+        };
+    }
+}
+
 my $fate_chart = [
     [ 50,  25,  10,  5,   5,   0,   0,   -20, -20, -40, -40, -55, -65 ],
     [ 75,  50,  25,  15,  10,  5,   5,   0,   0,   -20, -20, -35, -45 ],
