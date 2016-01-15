@@ -159,6 +159,7 @@ sub d100 {
 
 sub ask {
     my ( $self, $acting, $difficulty, $roll ) = @_;
+    $difficulty ||= $self->chaos_level_to_rank;
     my $odds = $self->get_odds( $acting, $difficulty );
     $roll = defined $roll ? $roll : $self->d100;
     my ( $answer, $random_event );
