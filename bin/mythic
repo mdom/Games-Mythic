@@ -22,6 +22,7 @@ my $term = Term::ShellUI->new(
         },
         add => {
             minargs => 2,
+            args    => [ sub { complete_string(@_,[qw(npc thread)]) } ],
             proc    => sub {
                 my $what   = shift;
                 my $thing  = join( ' ', @_ );
@@ -36,6 +37,11 @@ my $term = Term::ShellUI->new(
 sub complete_ranks {
     my ( $self, $cmpl ) = @_;
     return [ grep { index( $_, $cmpl->{str} ) == 0 } $game->ranks ];
+}
+
+sub complete_string {
+   my ( $self, $cmpl, $strings ) = @_;
+    return [ grep { index( $_, $cmpl->{str} ) == 0 } @$strings ];
 }
 
 $term->run();
