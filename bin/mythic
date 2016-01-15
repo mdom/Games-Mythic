@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Games::Mythic;
+use Term::ShellUI;
+
+my $game = Games::Mythic->new();
+
+my $term = Term::ShellUI->new(
+    commands => {
+        ask => {
+            proc => sub {
+                my $r = $game->ask(@_);
+                print "Answer: $r->{answer}"
+                  . ( $r->{event} ? " Event: $r->{event}" : '' )
+                  . " Roll: $r->{roll}\n";
+            },
+            minargs => 1,
+            maxargs => 2,
+        },
+    },
+);
+
+$term->run();
