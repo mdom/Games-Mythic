@@ -55,10 +55,13 @@ my $fate_chart = [
     [ 170, 165, 150, 120, 120, 100, 100, 95,  95,  90,  90,  75,  50 ]
 ];
 
-my @ranks = qw(
-  miniscule2 miniscule weak low below-average
-  average above-average high exceptional incredible
-  awesome superhuman superhuman2);
+sub ranks {
+    return [
+        qw(miniscule2 miniscule weak low below-average average
+          above-average high exceptional incredible awesome superhuman
+          superhuman2 )
+    ];
+}
 
 my $actions = [
     "Attainment",  "Starting",      "Neglect",     "Fight",
@@ -145,6 +148,7 @@ sub rank_to_index {
     my ( $self, $rank ) = @_;
     state %ranks;
     if ( not %ranks ) {
+        my @ranks = @{ $self->ranks };
         while ( my ( $index, $rank ) = each @ranks ) {
             $ranks{$rank} = $index;
         }
