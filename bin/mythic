@@ -19,6 +19,16 @@ my $term = Term::ShellUI->new(
             minargs => 1,
             maxargs => 2,
         },
+        add => {
+            minargs => 2,
+            proc    => sub {
+                my $what   = shift;
+                my $thing  = join( ' ', @_ );
+                my $method = "add_$what";
+                $game->$method($thing);
+                print "$thing added to list of ${what}s.\n";
+            },
+        }
     },
 );
 
