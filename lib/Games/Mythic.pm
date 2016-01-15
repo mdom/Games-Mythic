@@ -154,12 +154,12 @@ sub rank_to_index {
 
 sub d100 {
     my ($self) = @_;
-    return (int rand 99) + 1;
+    return ( int rand 99 ) + 1;
 }
 
 sub ask {
     my ( $self, $acting, $difficulty, $roll ) = @_;
-    my $odds = $self->get_odds($acting, $difficulty);
+    my $odds = $self->get_odds( $acting, $difficulty );
     $roll = defined $roll ? $roll : $self->d100;
     my ( $answer, $random_event );
     if ( $roll <= $odds->[0] ) {
