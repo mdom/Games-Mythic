@@ -18,6 +18,7 @@ my $term = Term::ShellUI->new(
             },
             minargs => 1,
             maxargs => 2,
+            args    => \&complete_ranks,
         },
         add => {
             minargs => 2,
@@ -31,5 +32,10 @@ my $term = Term::ShellUI->new(
         }
     },
 );
+
+sub complete_ranks {
+    my ( $self, $cmpl ) = @_;
+    return [ grep { index( $_, $cmpl->{str} ) == 0 } $game->ranks ];
+}
 
 $term->run();
