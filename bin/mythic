@@ -21,22 +21,35 @@ my $term = Term::ShellUI->new(
             args    => \&complete_ranks,
         },
         add => {
-            minargs => 2,
-            args    => [ sub { complete_string(@_,[qw(npc thread)]) } ],
-            proc    => sub {
-                my $what   = shift;
-                my $thing  = join( ' ', @_ );
-                my $method = "add_$what";
-                $game->$method($thing);
-                print "$thing added to list of ${what}s.\n";
+            cmds => {
+                npc    => cmd_add_to_list('npc'),
+                thread => cmd_add_to_list('thread'),
             },
         }
     },
 );
 
+sub cmd_add_to_list {
+    my ($list) = @_;
+    return {
+        minargs => 1,
+        proc    => sub {
+            my $thing  = join( ' ', @_ );
+            my $method = "add_$list";
+            $game->$method($thing);
+            print "$thing added to list of ${list}s.\n";
+        },
+    };
+}
+
 sub complete_ranks {
     my ( $self, $cmpl ) = @_;
     return complete_string( $self, $cmpl, $game->ranks );
+}
+
+sub complete_list {
+    my ( $self, $cmpl, $list ) = @_;
+    return complete_string( $self, $cmpl, $game->$list );
 }
 
 sub complete_string {
