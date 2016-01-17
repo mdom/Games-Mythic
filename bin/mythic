@@ -25,7 +25,13 @@ my $term = Term::ShellUI->new(
                 npc    => cmd_add_to_list('npc'),
                 thread => cmd_add_to_list('thread'),
             },
-        }
+        },
+        remove => {
+            cmds => {
+                npc    => cmd_remove_from_list('npc'),
+                thread => cmd_remove_from_list('thread'),
+            },
+        },
     },
 );
 
@@ -39,6 +45,20 @@ sub cmd_add_to_list {
             $game->$method($thing);
             print "$thing added to list of ${list}s.\n";
         },
+    };
+}
+
+sub cmd_remove_from_list {
+    my ($list) = @_;
+    return {
+        args => [ sub { complete_list( @_, "${list}s" ) } ],
+        proc => sub {
+            my $thing  = join( ' ', @_ );
+            my $method = "remove_$list";
+            $game->$method($thing);
+            print "$thing removed from of ${list}s.\n";
+        },
+        minargs => 1,
     };
 }
 
