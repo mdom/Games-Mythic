@@ -36,11 +36,11 @@ my $term = Term::ShellUI->new(
 
 sub complete_ranks {
     my ( $self, $cmpl ) = @_;
-    return [ grep { index( $_, $cmpl->{str} ) == 0 } $game->ranks ];
+    return complete_string( $self, $cmpl, $game->ranks );
 }
 
 sub complete_string {
-   my ( $self, $cmpl, $strings ) = @_;
+    my ( $self, $cmpl, $strings ) = @_;
     return [ grep { index( $_, $cmpl->{str} ) == 0 } @$strings ];
 }
 
