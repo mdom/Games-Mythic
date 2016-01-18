@@ -32,6 +32,18 @@ my $term = Term::ShellUI->new(
                 thread => cmd_remove_from_list('thread'),
             },
         },
+        increase_chaos => {
+            proc => sub {
+                $game->increase_chaos;
+                print "New chaos level: " . $game->chaos_level . "\n";
+            },
+        },
+        decrease_chaos => {
+            proc => sub {
+                $game->decrease_chaos;
+                print "New chaos level: " . $game->chaos_level . "\n";
+            },
+        },
     },
 );
 

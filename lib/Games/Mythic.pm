@@ -304,4 +304,14 @@ sub random_event {
       . $self->random_element($subjects);
 }
 
+sub increase_chaos {
+    my $self = shift;
+    return $self->chaos_level( $self->chaos_level + 1 );
+}
+
+sub decrease_chaos {
+    my $self = shift;
+    return $self->chaos_level( $self->chaos_level - 1 );
+}
+
 1;
